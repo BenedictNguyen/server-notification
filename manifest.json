@@ -10,7 +10,7 @@
   ],
   "host_permissions": [
     "https://telerad.caresnova.ai/*",
-    "https://telerad-notification-api.onrender.com/*"
+    "https://server-notification-7dfu.onrender.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -25,10 +25,5 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "Telerad Notification Settings"
-  },
-  "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
   }
 }

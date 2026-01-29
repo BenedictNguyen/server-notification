@@ -2,7 +2,7 @@
 console.log('🚀 Telerad Notification Background Service started');
 
 // API endpoint (sử dụng server Python bạn đã tạo)
-const API_ENDPOINT = 'https://telerad-notification-api.onrender.com/send-email';
+const API_ENDPOINT = 'https://server-notification-7dfu.onrender.com';
 
 // Lắng nghe tin nhắn từ content script
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -76,7 +76,6 @@ async function sendEmailNotification(doctorEmail, newCases = 1, isTest = false) 
 function showNotification(title, message) {
   chrome.notifications.create({
     type: 'basic',
-    iconUrl: 'icon.png',
     title: title,
     message: message,
     priority: 2

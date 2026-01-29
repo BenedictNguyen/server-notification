@@ -6,7 +6,17 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from extension
+
+# Cấu hình CORS cho Chrome Extension
+CORS(app, resources={
+    r"/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "expose_headers": ["Content-Type"],
+        "supports_credentials": False
+    }
+})
 
 # CẤU HÌNH
 CONFIG = {
@@ -15,8 +25,17 @@ CONFIG = {
     'SYSTEM_URL': 'https://telerad.caresnova.ai/work-list'
 }
 
-@app.route('/send-email', methods=['POST'])
+# Root endpoint - đồng bộ với background.js
+@app.route('/', methods=['POST', 'OPTIONS'])
 def send_email():
+    # Handle preflight request
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        return response, 200
+    
     try:
         data = request.json
         doctor_email = data.get('doctor_email')
@@ -69,9 +88,15 @@ def send_email():
         print(f'❌ Error: {e}')
         return jsonify({'success': False, 'error': str(e)}), 500
 
+# Endpoint kiểm tra server còn sống
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({'status': 'ok'})
+    return jsonify({'status': 'ok', 'service': 'Telerad Email Notification'})
+
+# Thêm endpoint /send-email để tương thích backward
+@app.route('/send-email', methods=['POST', 'OPTIONS'])
+def send_email_legacy():
+    return send_email()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
