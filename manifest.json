@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Telerad Email Notification",
+  "version": "1.0",
+  "description": "Tự động gửi email khi có ca mới cần đọc",
+  "permissions": [
+    "storage",
+    "alarms",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://telerad.caresnova.ai/*",
+    "https://telerad-notification-api.onrender.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://telerad.caresnova.ai/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Telerad Notification Settings"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
